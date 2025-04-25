@@ -16,25 +16,36 @@ llm = init_chat_model(
     temperature=0
 )
 
+st.title("Translator Application")
 
-prompt = PromptTemplate.from_template(
-    """You are a translator. Translate the following text to {target_language}: {source_text}
-    
-    Do not add any extra information or explanation. Just provide the translation."""
+source_text = st.text_area(
+    "Enter the text you want to translate:",
+    placeholder="Type your text here...",
+    height=200
 )
 
-st.title("Language Translator")
+target_language = st.selectbox(
+    "Select the target language:",
+    languages
+)
 
-source_text = st.text_area("Enter the text to be translated:")
+button = st.button("Translate",
+    disabled=not source_text or not target_language
+)
 
-target_language = st.selectbox("Target language", languages)
+if button:
 
-translate = st.button("Translate now!")
+    prompt = PromptTemplate.from_template("""
+    Translate the following text to {target_language}.:
+    
+    <text>
+    {text}
+    </text>
+                                          
+    Only proviude the translated text without any additional information.
+    """)
 
-if translate:
-
-    executed_prompt = prompt.invoke({"target_language": target_language, "source_text": source_text})
-
+    executed_prompt = prompt.invoke({"target_language": target_language, "text": source_text})
     output = llm.invoke(executed_prompt)
 
-    st.write(f"{output.content}")
+    st.write(f"Translated text: {output.content}")

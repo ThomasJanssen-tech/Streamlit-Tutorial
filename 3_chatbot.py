@@ -5,7 +5,6 @@ import streamlit as st
 load_dotenv()
 
 from langchain.chat_models import init_chat_model
-from langchain.prompts import PromptTemplate
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 llm = init_chat_model(
@@ -14,36 +13,36 @@ llm = init_chat_model(
     temperature=0.5
 )
 
-st.title("Chatbot")
+st.title("🤖 Astronaut Chatbot")
+
 
 if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-    st.session_state.messages.append(SystemMessage("Act like an astronaut"))
-
+    st.session_state.messages = [
+        SystemMessage(
+            content="You are an astronaut. Act like an astronaut."
+        )
+    ]
 
 for message in st.session_state.messages:
     if isinstance(message, HumanMessage):
         with st.chat_message("user"):
-            st.write(message.content)
+            st.markdown(message.content)
     elif isinstance(message, AIMessage):
         with st.chat_message("assistant"):
-            st.write(message.content)
+            st.markdown(message.content)
 
-
-
-prompt = st.chat_input("Ask me anything!")
+prompt = st.chat_input("Ask me anything about the universe!")
 
 if prompt:
 
     with st.chat_message("user"):
-        st.write(prompt)
+        st.markdown(prompt)
 
-        st.session_state.messages.append(HumanMessage(prompt))
+        st.session_state.messages.append(HumanMessage(content=prompt))
 
-
-    output = llm.invoke(st.session_state.messages)
     with st.chat_message("assistant"):
-        st.write(output.content)
 
-        st.session_state.messages.append(AIMessage(output.content))
+        output = llm.invoke(st.session_state.messages)
+
+        st.markdown(output.content)
+        st.session_state.messages.append(AIMessage(content=output.content))

@@ -15,42 +15,38 @@ llm = init_chat_model(
     temperature=0
 )
 
-st.title("Ask questions about a PDF file")
+st.title("File Question Answering Application")
 
 uploaded_file = st.file_uploader("Upload a PDF file", type="pdf")
 
-question = st.text_input(
-    "Enter your question about the PDF file:",
-    placeholder="What is the main topic of the document?",
-    disabled=not uploaded_file)
+question = st.text_area("Ask a question about the file:",disabled=not uploaded_file)
 
-submit = st.button("Ask now!",
-    disabled=not question)
+submit = st.button("Submit",
+    disabled=not uploaded_file or not question
+)
 
-if submit and uploaded_file and question:
-
-    reader = PdfReader(uploaded_file)
-
-    all_text = ""
-    for page in reader.pages:
-        all_text += page.extract_text()
+if submit:
+    # Read the PDF file
+    pdf_reader = PdfReader(uploaded_file)
+    text = ""
+    for page in pdf_reader.pages:
+        text += page.extract_text()
+   
 
     prompt = PromptTemplate.from_template("""
-    Answer the following question based on the provided text.
-
-    Question:
-
+    Answer the following question based on the provided text:
     <question>
-    {question}
+    {question} 
     </question>
 
-    Text:
+    Document:
     <text>
     {text}
-    </text>
+    </text>                  
+
     """)
 
-    executed_prompt = prompt.invoke({"question": question, "text": all_text})
+    executed_prompt = prompt.invoke({"question": question, "text": text})
     output = llm.invoke(executed_prompt)
 
     st.write(f"{output.content}")
