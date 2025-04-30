@@ -41,9 +41,11 @@ pip install -r requirements.txt
 ```
 
 <h3>5. Add OpenAI API Key</h3>
-Rename the .env.example file to .env
-Select whether you want to use Ollama, OpenAI or Anthropic
-If OpenAI/Anthropic: add your API key
+<ul>
+<li>Rename the .env.example file to .env</li>
+<li>Select whether you want to use Ollama, OpenAI or Anthropic</li>
+<li><i>If OpenAI/Anthropic: add your API key</i></li>
+</ul>
 
 <h2>Executing the scripts</h2>
 
