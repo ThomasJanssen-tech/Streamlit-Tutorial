@@ -58,3 +58,9 @@ streamlit run 1_translator.py
 streamlit run 2_file_qa.py
 streamlit run 3_chatbot.py
 ```
+
+<h2>Further reading</h2>
+<ul>
+<li>https://python.langchain.com/docs/how_to/chat_models_universal_init/</li>
+<li>https://docs.streamlit.io/develop/tutorials</li>
+</ul>
